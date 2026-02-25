@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>It Found Me — Thus We Proceed</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --pink: #F2A7BB;
+      --black: #0D0D0D;
+      --white: #F7F4F0;
+      --mid: #E8E4DE;
+    }
+
+    body {
+      background: var(--white);
+      color: var(--black);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 3rem;
+      border-bottom: 1px solid var(--mid);
+    }
+
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.1em;
+      color: var(--black);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex; gap: 2.5rem; list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--black);
+      text-decoration: none;
+      font-weight: 500;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute; bottom: -2px; left: 0; right: 0;
+      height: 1px; background: var(--pink);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+    .nav-links a:hover::after { transform: scaleX(1); }
+
+    .post-header {
+      background: var(--pink);
+      padding: 5rem 3rem 4rem;
+    }
+
+    .post-header-inner {
+      max-width: 780px;
+      margin: 0 auto;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: 500;
+      text-decoration: none;
+      color: var(--black);
+      margin-bottom: 2.5rem;
+      opacity: 0.6;
+      transition: opacity 0.2s;
+    }
+    .back-link:hover { opacity: 1; }
+    .back-link::before { content: '←'; }
+
+    .post-tag {
+      display: inline-block;
+      background: var(--black);
+      color: var(--white);
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-weight: 500;
+      padding: 0.3rem 0.8rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .post-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+    }
+
+    .post-title em { font-style: italic; }
+
+    .post-meta {
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(13,13,13,0.55);
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .post-body {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 5rem 3rem 6rem;
+    }
+
+    .post-body p {
+      font-size: 1.08rem;
+      line-height: 1.9;
+      color: #2a2a2a;
+      margin-bottom: 1.8rem;
+    }
+
+    .post-body h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.7rem;
+      line-height: 1.2;
+      margin: 3rem 0 1.2rem;
+    }
+
+    .post-body em { font-style: italic; }
+    .post-body strong { font-weight: 500; }
+
+    .post-body blockquote {
+      border-left: 3px solid var(--pink);
+      padding: 0.5rem 0 0.5rem 1.8rem;
+      margin: 2.5rem 0;
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: 1.25rem;
+      line-height: 1.6;
+      color: #444;
+    }
+
+    .post-body hr {
+      border: none;
+      border-top: 1px solid var(--mid);
+      margin: 3rem 0;
+    }
+
+    .post-footer {
+      border-top: 1px solid var(--mid);
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 3rem 3rem 6rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+
+    .post-footer-left {
+      font-size: 0.8rem;
+      color: #888;
+      letter-spacing: 0.05em;
+    }
+
+    .post-footer-left strong {
+      display: block;
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--black);
+      margin-bottom: 0.25rem;
+    }
+
+    .back-to-blog {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: 500;
+      text-decoration: none;
+      color: var(--black);
+      border-bottom: 2px solid var(--pink);
+      padding-bottom: 0.2rem;
+      transition: gap 0.2s ease;
+    }
+    .back-to-blog:hover { gap: 1.2rem; }
+    .back-to-blog::before { content: '←'; }
+
+    .newsletter-strip {
+      background: var(--black);
+      color: var(--white);
+      padding: 4rem 3rem;
+      text-align: center;
+    }
+
+    .newsletter-strip h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.05em;
+    }
+
+    .newsletter-strip p {
+      font-size: 0.9rem;
+      opacity: 0.5;
+      margin-bottom: 2rem;
+    }
+
+    .newsletter-form {
+      display: flex;
+      max-width: 380px;
+      margin: 0 auto;
+    }
+
+    .newsletter-form input {
+      flex: 1;
+      padding: 0.9rem 1.2rem;
+      border: 2px solid rgba(255,255,255,0.2);
+      background: transparent;
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      outline: none;
+    }
+    .newsletter-form input::placeholder { color: rgba(255,255,255,0.3); }
+
+    .newsletter-form button {
+      padding: 0.9rem 1.4rem;
+      background: var(--pink);
+      color: var(--black);
+      border: 2px solid var(--pink);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1rem;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .newsletter-form button:hover { background: transparent; color: var(--pink); }
+
+    footer {
+      background: var(--black);
+      color: var(--white);
+      padding: 2rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.2rem;
+      letter-spacing: 0.1em;
+    }
+
+    .footer-right {
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 1.2rem 1.5rem; }
+      .nav-links { display: none; }
+      .post-header { padding: 3.5rem 1.5rem 2.5rem; }
+      .post-body { padding: 3rem 1.5rem 4rem; }
+      .post-footer { padding: 2rem 1.5rem 4rem; }
+      footer { flex-direction: column; gap: 1rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">Thus We Proceed</a>
+    <ul class="nav-links">
+      <li><a href="index.html#writing">Writing</a></li>
+      <li><a href="index.html#about">About</a></li>
+      <li><a href="index.html#newsletter">Subscribe</a></li>
+    </ul>
+  </nav>
+
+  <header class="post-header">
+    <div class="post-header-inner">
+      <a href="index.html" class="back-link">All posts</a>
+      <div class="post-tag">Personal</div>
+      <h1 class="post-title">It found me.<br><em>I wasn't searching.</em></h1>
+      <div class="post-meta">
+        <span>February 24, 2026</span>
+        <span>5 min read</span>
+      </div>
+    </div>
+  </header>
+
+  <article class="post-body">
+
+    <p>I wasn't searching for "eastern philosophy" — it found me, recruited me, and at first I felt it was a positive shift in my life. It changed me. It's not something I could put into words since some of it is unclear or too lengthy to say here. At the time I thought I found the key to the universe. 😂</p>
+
+    <p>I probably felt somewhat jaded learning about "lives" and was eager to feel "aligned" to "my path." Adding quotes because it's funny/cringey/sweet how desperate I was after learning about Shambhavi and segueing into mindset/manifestation to change. (Nothing I am concerned with now.)</p>
+
+    <p>This was during COVID. I learned inner engineering and Shambhavi.</p>
+
+    <hr />
+
+    <h2>Where I'm at now</h2>
+
+    <p>It seems like a standstill.</p>
+
+    <p>I was always very career driven — worked at Publix through high school and into my 20s while starting my career. I was a worker no matter what or how I felt. I wanted to be successful, because with success comes resources to change your life and the world around you.</p>
+
+    <p>It just seems like my life slowly fell apart over the last 5 years.</p>
+
+    <blockquote>Internally I feel more stable and resilient. I contribute and work more effectively, I'm more motivated and my skills are more advanced.</blockquote>
+
+    <p>Having time lately to work on my skills and feeling the agony of not having stable income creates motivation like no other. It just seems like I'm not translating externally to companies. I have no relationships anymore, lol. And without a car it's difficult to make quick changes.</p>
+
+    <p>I could try to start my own consulting company or something — but without a clear vision and inspiration for that, I don't see it being an option. I could earn money online on OnlyFans-type websites but that feels like a life not worth living, even if it's temporary to get by.</p>
+
+    <p>Is it a timing thing? That would go against my accountability of "being responsible for everything."</p>
+
+    <hr />
+
+    <h2>The background</h2>
+
+    <p>I came from a somewhat rigid background. I love and respect my family but they wouldn't be interested in learning about any meditation I found, as they are strictly Christian. As of right now there is no relationship with family. It's something I try to accept, and I hope that when I'm working full time and my finances are squared away, I can visit family as a respectful adult — not coming around out of desperation. Which I refuse to do at this age. (Ain't no prodigal daughter return srry mum.) 😂</p>
+
+    <hr />
+
+    <h2>A very concise overview</h2>
+
+    <p>I need a job. This is weird because I was always good at working. If I can't work I can't be alive.</p>
+
+    <p>Sure, I can go live at the Isha Foundation (given they would accept me) — but then I have to rehome my dog, which is rude for him. This sucks. :)</p>
+
+    <p>There's a whole part two to this. I'll wait to share — or maybe find a way to get answers if I don't here, since I've been searching for a while.</p>
+
+    <p>I truly appreciate any feedback.</p>
+
+  </article>
+
+  <div class="post-footer">
+    <div class="post-footer-left">
+      <strong>Margaret Northup</strong>
+      Writing about life, work, and the space between.
+    </div>
+    <a href="index.html" class="back-to-blog">All posts</a>
+  </div>
+
+  <section class="newsletter-strip">
+    <h3>Enjoyed this?</h3>
+    <p>New posts straight to your inbox.</p>
+    <div class="newsletter-form">
+      <input type="email" placeholder="your@email.com" />
+      <button>Subscribe</button>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-logo">Thus We Proceed</div>
+    <div class="footer-right">© 2026 Margaret Northup</div>
+  </footer>
+
+</body>
+</html>
