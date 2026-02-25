@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thus We Proceed — Margaret Northup</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --pink: #F2A7BB;
+      --black: #0D0D0D;
+      --white: #F7F4F0;
+      --mid: #E8E4DE;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--white);
+      color: var(--black);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      cursor: none;
+      overflow-x: hidden;
+    }
+
+    /* Custom cursor */
+    .cursor {
+      position: fixed;
+      width: 12px; height: 12px;
+      background: var(--pink);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s ease, width 0.2s ease, height 0.2s ease;
+      mix-blend-mode: multiply;
+    }
+    .cursor.big { width: 48px; height: 48px; }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 3rem;
+      mix-blend-mode: multiply;
+    }
+
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.1em;
+      color: var(--black);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex; gap: 2.5rem; list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--black);
+      text-decoration: none;
+      font-weight: 500;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute; bottom: -2px; left: 0; right: 0;
+      height: 1px;
+      background: var(--pink);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+    .nav-links a:hover::after { transform: scaleX(1); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      background: var(--pink);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding: 8rem 3rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0; right: 0;
+      height: 80px;
+      background: var(--white);
+      clip-path: polygon(0 100%, 100% 100%, 100% 40%, 0 100%);
+    }
+
+    .hero-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding-bottom: 5rem;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.2s forwards;
+    }
+
+    .hero-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(5rem, 10vw, 9rem);
+      line-height: 0.92;
+      letter-spacing: -0.01em;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.4s forwards;
+    }
+
+    .hero-title em {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: 0.85em;
+      color: var(--black);
+    }
+
+    .hero-sub {
+      margin-top: 2rem;
+      font-size: 1rem;
+      line-height: 1.7;
+      max-width: 380px;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.6s forwards;
+    }
+
+    .hero-right {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: flex-end;
+      padding-bottom: 5rem;
+      opacity: 0;
+      animation: fadeUp 1s 0.8s forwards;
+    }
+
+    .hero-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 16rem;
+      line-height: 1;
+      color: rgba(13,13,13,0.08);
+      position: absolute;
+      right: 2rem;
+      top: 6rem;
+      pointer-events: none;
+    }
+
+    .scroll-hint {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .scroll-hint::before {
+      content: '';
+      width: 40px; height: 1px;
+      background: var(--black);
+    }
+
+    /* TICKER */
+    .ticker {
+      background: var(--black);
+      color: var(--white);
+      padding: 0.85rem 0;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .ticker-inner {
+      display: inline-block;
+      animation: ticker 20s linear infinite;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1rem;
+      letter-spacing: 0.15em;
+    }
+
+    .ticker-inner span { color: var(--pink); margin: 0 1rem; }
+
+    @keyframes ticker {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    /* FEATURED */
+    .featured {
+      padding: 7rem 3rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .section-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-weight: 500;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1; height: 1px;
+      background: var(--black);
+      opacity: 0.2;
+    }
+
+    .featured-post {
+      grid-column: 1;
+    }
+
+    .featured-tag {
+      display: inline-block;
+      background: var(--pink);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: 500;
+      padding: 0.3rem 0.8rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .featured-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2.2rem, 4vw, 3.5rem);
+      line-height: 1.1;
+      margin-bottom: 1.2rem;
+    }
+
+    .featured-title em { font-style: italic; color: #555; }
+
+    .featured-excerpt {
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: #444;
+      margin-bottom: 2rem;
+      max-width: 480px;
+    }
+
+    .read-more {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: 500;
+      text-decoration: none;
+      color: var(--black);
+      border-bottom: 2px solid var(--pink);
+      padding-bottom: 0.2rem;
+      transition: gap 0.2s ease;
+    }
+    .read-more:hover { gap: 1.2rem; }
+    .read-more::after { content: '→'; }
+
+    .featured-meta {
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      color: #888;
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+    }
+
+    /* SIDE POSTS */
+    .side-posts {
+      grid-column: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .side-post {
+      padding: 1.8rem 0;
+      border-bottom: 1px solid var(--mid);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1rem;
+      align-start: start;
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.2s;
+    }
+
+    .side-post:hover .side-post-title { color: var(--pink); }
+
+    .side-post-tag {
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #999;
+      margin-bottom: 0.4rem;
+      font-weight: 500;
+    }
+
+    .side-post-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.15rem;
+      line-height: 1.3;
+      transition: color 0.2s;
+    }
+
+    .side-post-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem;
+      color: var(--mid);
+      line-height: 1;
+    }
+
+    /* DARK SECTION */
+    .dark-section {
+      background: var(--black);
+      color: var(--white);
+      padding: 7rem 3rem;
+    }
+
+    .dark-section .section-label::after { background: var(--white); }
+
+    .posts-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .post-card {
+      padding: 2rem;
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: border-color 0.3s, transform 0.3s;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+    .post-card:hover {
+      border-color: var(--pink);
+      transform: translateY(-4px);
+    }
+
+    .post-card-tag {
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--pink);
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+
+    .post-card-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.3rem;
+      line-height: 1.3;
+      margin-bottom: 1rem;
+    }
+
+    .post-card-excerpt {
+      font-size: 0.85rem;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.55);
+    }
+
+    .post-card-date {
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.3);
+      text-transform: uppercase;
+      margin-top: 1.5rem;
+    }
+
+    /* ABOUT STRIP */
+    .about-strip {
+      padding: 7rem 3rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: center;
+    }
+
+    .about-big-text {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4rem, 8vw, 7rem);
+      line-height: 0.9;
+    }
+
+    .about-big-text em {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: 0.9em;
+    }
+
+    .about-content p {
+      font-size: 1rem;
+      line-height: 1.85;
+      color: #444;
+      margin-bottom: 1.5rem;
+    }
+
+    /* NEWSLETTER */
+    .newsletter {
+      background: var(--pink);
+      padding: 5rem 3rem;
+      text-align: center;
+    }
+
+    .newsletter h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 6vw, 5rem);
+      margin-bottom: 0.5rem;
+    }
+
+    .newsletter p {
+      font-size: 0.95rem;
+      margin-bottom: 2.5rem;
+      opacity: 0.7;
+    }
+
+    .newsletter-form {
+      display: flex;
+      max-width: 420px;
+      margin: 0 auto;
+      gap: 0;
+    }
+
+    .newsletter-form input {
+      flex: 1;
+      padding: 1rem 1.2rem;
+      border: 2px solid var(--black);
+      background: transparent;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    .newsletter-form button {
+      padding: 1rem 1.5rem;
+      background: var(--black);
+      color: var(--white);
+      border: 2px solid var(--black);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1rem;
+      letter-spacing: 0.1em;
+      cursor: none;
+      transition: background 0.2s, color 0.2s;
+    }
+    .newsletter-form button:hover {
+      background: transparent;
+      color: var(--black);
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--black);
+      color: var(--white);
+      padding: 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: 0.1em;
+    }
+
+    .footer-right {
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 1.2rem 1.5rem; }
+      .nav-links { display: none; }
+      .hero { grid-template-columns: 1fr; padding: 6rem 1.5rem 3rem; }
+      .hero-right { display: none; }
+      .featured { grid-template-columns: 1fr; padding: 4rem 1.5rem; }
+      .side-posts { grid-column: 1; }
+      .posts-grid { grid-template-columns: 1fr; }
+      .about-strip { grid-template-columns: 1fr; padding: 4rem 1.5rem; gap: 2rem; }
+      .newsletter { padding: 4rem 1.5rem; }
+      footer { flex-direction: column; gap: 1rem; text-align: center; }
+      .dark-section { padding: 4rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">Thus We Proceed</a>
+    <ul class="nav-links">
+      <li><a href="#writing">Writing</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#newsletter">Subscribe</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-number">01</div>
+    <div class="hero-left">
+      <p class="hero-eyebrow">Margaret Northup — Personal + Professional</p>
+      <h1 class="hero-title">Thus<br>We<br><em>Proceed.</em></h1>
+      <p class="hero-sub">Writing about life, the way it shapes how we work, and what happens when we're honest about both.</p>
+    </div>
+    <div class="hero-right">
+      <p class="scroll-hint">Scroll to read</p>
+    </div>
+  </section>
+
+  <!-- TICKER -->
+  <div class="ticker">
+    <div class="ticker-inner">
+      Thus We Proceed <span>✦</span> Margaret Northup <span>✦</span> Life + Work <span>✦</span> Thinking Out Loud <span>✦</span> Thus We Proceed <span>✦</span> Margaret Northup <span>✦</span> Life + Work <span>✦</span> Thinking Out Loud <span>✦</span> Thus We Proceed <span>✦</span> Margaret Northup <span>✦</span> Life + Work <span>✦</span> Thinking Out Loud <span>✦</span> Thus We Proceed <span>✦</span> Margaret Northup <span>✦</span> Life + Work <span>✦</span> Thinking Out Loud <span>✦</span>
+    </div>
+  </div>
+
+  <!-- FEATURED -->
+  <section class="featured" id="writing">
+    <div class="featured-post reveal">
+      <div class="section-label">Featured Post</div>
+      <div class="featured-tag">Personal</div>
+      <p class="featured-meta">February 18, 2026 &nbsp;·&nbsp; 6 min read</p>
+      <h2 class="featured-title">The morning I decided to <em>stop pretending</em> I had it together.</h2>
+      <p class="featured-excerpt">There's a version of yourself you perform for the world — polished, certain, moving forward with intention. Then there's the Tuesday morning version. I've been thinking about which one actually builds anything worth keeping.</p>
+      <a href="#" class="read-more">Read the post</a>
+    </div>
+
+    <div class="side-posts reveal">
+      <div class="section-label">Recent</div>
+
+      <a href="#" class="side-post">
+        <div>
+          <div class="side-post-tag">Work</div>
+          <div class="side-post-title">On being the person in the room who asks the obvious question.</div>
+        </div>
+        <div class="side-post-number">02</div>
+      </a>
+
+      <a href="#" class="side-post">
+        <div>
+          <div class="side-post-tag">Personal</div>
+          <div class="side-post-title">What I learned about ambition from completely burning out.</div>
+        </div>
+        <div class="side-post-number">03</div>
+      </a>
+
+      <a href="#" class="side-post">
+        <div>
+          <div class="side-post-tag">Work</div>
+          <div class="side-post-title">The meeting that changed how I run every meeting after it.</div>
+        </div>
+        <div class="side-post-number">04</div>
+      </a>
+
+      <a href="#" class="side-post">
+        <div>
+          <div class="side-post-tag">Personal</div>
+          <div class="side-post-title">Slow seasons aren't failures. I had to learn that the hard way.</div>
+        </div>
+        <div class="side-post-number">05</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- DARK SECTION -->
+  <section class="dark-section" id="archive">
+    <div class="section-label">From the Archive</div>
+    <div class="posts-grid">
+      <a href="#" class="post-card reveal">
+        <div class="post-card-tag">Work</div>
+        <div class="post-card-title">Why I stopped optimizing and started deciding.</div>
+        <div class="post-card-excerpt">Productivity culture sold me a lie about how good work actually gets done. Here's what I found on the other side of letting go.</div>
+        <div class="post-card-date">Jan 2026</div>
+      </a>
+      <a href="#" class="post-card reveal" style="transition-delay: 0.1s">
+        <div class="post-card-tag">Personal</div>
+        <div class="post-card-title">The year I said yes to everything — and what it cost me.</div>
+        <div class="post-card-excerpt">An honest accounting of enthusiasm without boundaries, and the quiet recalibration that followed a very loud twelve months.</div>
+        <div class="post-card-date">Dec 2025</div>
+      </a>
+      <a href="#" class="post-card reveal" style="transition-delay: 0.2s">
+        <div class="post-card-tag">Work</div>
+        <div class="post-card-title">On building trust in rooms that weren't built for you.</div>
+        <div class="post-card-excerpt">Credibility is strange. It arrives slowly and disappears fast. I've been paying attention to how it actually moves.</div>
+        <div class="post-card-date">Nov 2025</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about-strip" id="about">
+    <div class="about-big-text reveal">
+      Hi,<br>I'm<br><em>Margaret.</em>
+    </div>
+    <div class="about-content reveal">
+      <p>I write about the intersection of personal life and professional ambition — because I've never found a clean line between them, and I suspect you haven't either.</p>
+      <p>This blog is where I think out loud. About work that matters, choices that shape us, and what it means to move forward honestly.</p>
+      <a href="#" class="read-more">More about me</a>
+    </div>
+  </section>
+
+  <!-- NEWSLETTER -->
+  <section class="newsletter" id="newsletter">
+    <h2>Stay in the loop.</h2>
+    <p>New posts, straight to your inbox. No noise.</p>
+    <div class="newsletter-form">
+      <input type="email" placeholder="your@email.com" />
+      <button type="submit">Subscribe</button>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">Thus We Proceed</div>
+    <div class="footer-right">© 2026 Margaret Northup &nbsp;·&nbsp; All rights reserved</div>
+  </footer>
+
+  <script>
+    // Cursor
+    const cursor = document.getElementById('cursor');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+    document.querySelectorAll('a, button').forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('big'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('big'));
+    });
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    reveals.forEach(r => observer.observe(r));
+  </script>
+</body>
+</html>
