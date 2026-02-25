@@ -1,0 +1,71 @@
+================================================================
+  THUS WE PROCEED — New Post Starter
+  Fill this in, then follow the steps at the bottom.
+================================================================
+
+TAG (choose one):
+  Personal / Work / Both
+
+TITLE:
+  Write your title here. You can mark words for italics like *this*.
+
+DATE:
+  Month Day, Year  (e.g. February 18, 2026)
+
+READ TIME:
+  Estimate how many minutes (e.g. 5 min read)
+
+----------------------------------------------------------------
+YOUR POST — write freely below this line.
+
+Use these markers to format as you go:
+
+  ## This becomes a section header (h2)
+  ### This becomes a smaller header (h3)
+  > This becomes a pull quote (blockquote)
+  ---  This becomes a dividing line (hr)
+  *italics* and **bold** work too
+
+----------------------------------------------------------------
+
+Write your post here...
+
+
+
+
+================================================================
+  DONE WRITING? HERE'S HOW TO PUBLISH IT.
+================================================================
+
+STEP 1 — Duplicate post-template.html
+  In GitHub, open post-template.html
+  Click the ··· menu → "Copy file"
+  Name it something like:  my-post-title.html
+  (use dashes, no spaces, e.g. "stop-pretending.html")
+
+STEP 2 — Edit the 4 marked spots in the new file
+  Look for lines that start with  ✏️ EDIT:
+  Change the tag, title, date, and read time.
+
+STEP 3 — Replace the post body
+  Find the <article class="post-body"> section
+  Delete the example paragraphs
+  Paste in your writing, wrapping each paragraph in <p>...</p>
+
+  For section headers:    <h2>Your header</h2>
+  For pull quotes:        <blockquote>Your quote</blockquote>
+  For dividers:           <hr>
+  For italics:            <em>word</em>
+  For bold:               <strong>word</strong>
+
+STEP 4 — Add it to the homepage (index.html)
+  Find the "Recent" side posts section
+  Copy one of the <a class="side-post"> blocks
+  Update the tag, title, and href to your new filename
+  (e.g. href="stop-pretending.html")
+
+STEP 5 — Save and push to GitHub
+  Your site rebuilds automatically.
+  Done!
+
+================================================================
